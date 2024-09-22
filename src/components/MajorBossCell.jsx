@@ -1,64 +1,35 @@
 import { useState } from "react";
+import { Tooltip } from "react-tooltip";
 
-const locations = ["?", "A", "B", "C", "D", "E", "F", "G", "H"];
+function MajorBossCell({ boss }) {
+  const [bossStatusCounter, setBossStatusCounter] = useState(0);
 
-function MajorItemCell({ item }) {
-  const [locationState, setLocationState] = useState(0);
-  const [upgradeCounter, setUpgradeCounter] = useState(0);
-  const [itemObtained, setItemObtained] = useState(false);
-
-  function incrementLocationState(e) {
-    if (e.currentTarget === e.target) e.stopPropagation();
-    if (locationState >= locations.length - 1) {
-      setLocationState(0);
+  function incrementBossStatusCounter(e) {
+    if (bossStatusCounter >= 3) {
+      setBossStatusCounter(0);
     } else {
-      setLocationState(locationState + 1);
-    }
-  }
-
-  function incrementUpgradeCounter(e) {
-    if (e.currentTarget === e.target) e.stopPropagation();
-    if (upgradeCounter >= item.maxUpgrades) {
-      setUpgradeCounter(0);
-    } else {
-      setUpgradeCounter(upgradeCounter + 1);
+      setBossStatusCounter(bossStatusCounter + 1);
     }
   }
 
   return (
     <div
-      className="w-[64px] h-[64px] flex justify-between"
+      className="w-[64px] h-[64px] flex justify-end items-end"
+      data-tooltip-id={boss.id}
+      data-tooltip-content={boss.name}
       style={{
-        backgroundImage: `url(${item.icon})`,
+        backgroundImage: `url(${boss.icon})`,
         backgroundSize: "contain",
-        backgroundColor: `rgb(0,0,0,${
-          itemObtained || upgradeCounter > 0 ? 0 : 0.5
-        })`,
+        backgroundColor: `rgb(0,0,0,${bossStatusCounter > 1 ? 0 : 0.5})`,
         backgroundBlendMode: "darken",
+        borderRadius: 8,
       }}
-      onClick={(e) => {
-        if (e.currentTarget !== e.target) return;
-        if (item.maxUpgrades > 0) return;
-        setItemObtained(!itemObtained);
-      }}
+      onClick={(e) => incrementBossStatusCounter(e)}
     >
-      <button
-        className="w-[24px] h-[24px]"
-        onClick={(e) => incrementLocationState(e)}
-        style={{
-          backgroundColor: "#ffffff",
-          opacity: 1,
-          borderColor: "#000000",
-          borderWidth: 1,
-          borderRadius: "50%",
-        }}
-      >
-        <div className="text-sm">{locations[locationState]}</div>
-      </button>
-      {item.maxUpgrades > 0 && (
+      <Tooltip id={boss.id} />
+      {bossStatusCounter % 2 === 1 && (
         <button
-          className="w-[24px] h-[24px] self-end"
-          onClick={(e) => incrementUpgradeCounter(e)}
+          className="w-[48px] h-[48px]"
           style={{
             backgroundColor: "#ffffff",
             opacity: 1,
@@ -67,11 +38,11 @@ function MajorItemCell({ item }) {
             borderRadius: "50%",
           }}
         >
-          <div className="text-sm">{upgradeCounter}</div>
+          <div className="text-sm">DNA</div>
         </button>
       )}
     </div>
   );
 }
 
-export default MajorItemCell;
+export default MajorBossCell;

@@ -1,6 +1,7 @@
 const progressiveSuit = [
   {
     id: "progressiveSuit",
+    name: "Progressive Suit",
     type: "progressive",
     icons: [
       "./assets/item-icons/suit-progressive.png",

@@ -5,7 +5,7 @@ function Tracker() {
   return (
     <div className="container">
       <MajorItems
-        itemsSettings={{
+        settings={{
           speedBoosterHasUpgrades: true,
           flashShiftHasUpgrades: true,
           progressiveCharge: true,

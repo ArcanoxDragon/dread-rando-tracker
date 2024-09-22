@@ -1,6 +1,7 @@
 const progressiveJump = [
   {
     id: "progressiveJump",
+    name: "Progressive Jump",
     type: "progressive",
     icons: [
       "./assets/item-icons/jump-progressive.png",

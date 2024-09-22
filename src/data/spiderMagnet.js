@@ -1,6 +1,7 @@
 const spiderMagnet = [
   {
-    id: "flashShift",
+    id: "spiderMagnet",
+    name: "Spider Magnet",
     type: "single",
     icon: "./assets/item-icons/movement-spidermagnet.png",
     maxUpgrades: 0,

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Tooltip } from "react-tooltip";
 
 const locations = ["?", "A", "B", "C", "D", "E", "F", "G", "H"];
 
@@ -27,6 +28,8 @@ function MajorItemCell({ item }) {
 
   return (
     <div
+      data-tooltip-id={item.id}
+      data-tooltip-content={item.name}
       className="w-[64px] h-[64px] flex justify-between"
       style={{
         backgroundImage: `url(${item.icon})`,
@@ -42,6 +45,7 @@ function MajorItemCell({ item }) {
         setItemObtained(!itemObtained);
       }}
     >
+      <Tooltip id={item.id} />
       <button
         className="w-[24px] h-[24px]"
         onClick={(e) => incrementLocationState(e)}

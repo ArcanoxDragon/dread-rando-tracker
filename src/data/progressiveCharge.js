@@ -1,6 +1,7 @@
 const progressiveCharge = [
   {
     id: "progressiveCharge",
+    name: "Progressive Charge",
     type: "progressive",
     icons: [
       "./assets/item-icons/charge-progressive.png",

@@ -1,6 +1,7 @@
 const progressiveBeam = [
   {
     id: "progressiveBeam",
+    name: "Progressive Beam",
     type: "progressive",
     icons: [
       "./assets/item-icons/beam-progressive.png",

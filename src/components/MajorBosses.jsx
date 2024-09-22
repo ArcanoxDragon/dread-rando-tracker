@@ -19,7 +19,7 @@ function MajorBosses({ settings }) {
       <span className="text-white">Major Bosses</span>
       <div className="grid grid-cols-6 gap-x-4 gap-y-1 max-w-96">
         {bosses.map((boss) => {
-          return <MajorBossCell key={boss.id} item={boss} />;
+          return <MajorBossCell key={boss.id} boss={boss} />;
         })}
       </div>
     </div>
