@@ -16,9 +16,9 @@ function MajorItems({ settings }) {
   }, []);
 
   return (
-    <div className="p-8">
-      <span className="text-white">Major Items</span>
-      <div className="grid grid-cols-6 gap-x-4 gap-y-1 max-w-96">
+    <div className="px-3 mb-4">
+      <span className="text-white mb-5">Major Items</span>
+      <div className="grid grid-cols-6 gap-2">
         {items.map((item) => {
           if (item.type === "progressive") {
             return <MajorProgressiveItemCell key={item.id} item={item} />;

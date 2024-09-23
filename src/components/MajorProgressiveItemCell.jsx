@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
-
-const locations = ["?", "A", "B", "C", "D", "E", "F", "G", "H"];
+import locations from "../data/locations";
 
 function MajorProgressiveItemCell({ item }) {
   const [locationState, setLocationState] = useState(0);
@@ -34,8 +33,8 @@ function MajorProgressiveItemCell({ item }) {
       style={{
         backgroundImage: `url(${item.icons[currentProgressiveItemState]})`,
         backgroundSize: "contain",
-        backgroundColor: `rgb(0,0,0,${
-          currentProgressiveItemState === 0 ? 0.5 : 0
+        backgroundColor: `rgb(30,41,59,${
+          currentProgressiveItemState === 0 ? 0.75 : 0
         })`,
         backgroundBlendMode: "darken",
       }}

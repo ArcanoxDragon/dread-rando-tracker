@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
-
-const locations = ["?", "A", "B", "C", "D", "E", "F", "G", "H"];
+import locations from "../data/locations";
 
 function MajorItemCell({ item }) {
   const [locationState, setLocationState] = useState(0);
@@ -34,14 +33,11 @@ function MajorItemCell({ item }) {
       style={{
         backgroundImage: `url(${item.icon})`,
         backgroundSize: "contain",
-        backgroundColor: `rgb(0,0,0,${
-          itemObtained || upgradeCounter > 0 ? 0 : 0.5
-        })`,
+        backgroundColor: `rgb(30,41,59,${itemObtained ? 0 : 0.75})`,
         backgroundBlendMode: "darken",
       }}
       onClick={(e) => {
         if (e.currentTarget !== e.target) return;
-        if (item.maxUpgrades > 0) return;
         setItemObtained(!itemObtained);
       }}
     >

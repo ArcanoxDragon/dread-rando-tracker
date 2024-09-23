@@ -13,7 +13,7 @@ import stormMissile from "../data/stormMissile";
 import spiderMagnet from "../data/spiderMagnet";
 import speedBooster from "../data/speedBooster";
 import speedBoosterUpgrades from "../data/speedBoosterUpgrades";
-import progressiveJump from "../data/progressiveJump";
+import progressiveSpin from "../data/progressiveSpin";
 import singleJump from "../data/singleJump";
 import screwAttack from "../data/screwAttack";
 import progressiveSuit from "../data/progressiveSuit";
@@ -64,8 +64,8 @@ export function getItemData(itemsSettings) {
     buildItemList = buildItemList.concat(speedBooster);
   }
 
-  if (itemsSettings?.progressiveJump) {
-    buildItemList = buildItemList.concat(progressiveJump);
+  if (itemsSettings?.progressiveSpin) {
+    buildItemList = buildItemList.concat(progressiveSpin);
   } else {
     buildItemList = buildItemList.concat(singleJump);
   }
@@ -93,4 +93,14 @@ export function getItemData(itemsSettings) {
 
 export function getBossData() {
   return majorBosses;
+}
+
+export function getImagesToPreload() {
+  const itemImages = getItemData().map((item) => item.icon);
+  const bossImages = getBossData().map((item) => item.icon);
+
+  return itemImages.concat(bossImages, [
+    "./assets/go.png",
+    "./assets/item-icons/dna.png",
+  ]);
 }

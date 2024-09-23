@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tooltip } from "react-tooltip";
 
-function MajorBossCell({ boss }) {
+function MajorBossCell({ boss, hasDna }) {
   const [bossStatusCounter, setBossStatusCounter] = useState(0);
 
   function incrementBossStatusCounter(e) {
@@ -12,6 +12,12 @@ function MajorBossCell({ boss }) {
     }
   }
 
+  useEffect(() => {
+    if (hasDna) {
+      setBossStatusCounter(1);
+    }
+  }, []);
+
   return (
     <div
       className="w-[64px] h-[64px] flex justify-end items-end"
@@ -20,7 +26,7 @@ function MajorBossCell({ boss }) {
       style={{
         backgroundImage: `url(${boss.icon})`,
         backgroundSize: "contain",
-        backgroundColor: `rgb(0,0,0,${bossStatusCounter > 1 ? 0 : 0.5})`,
+        backgroundColor: `rgb(10,10,10,${bossStatusCounter > 1 ? 0.75 : 0})`,
         backgroundBlendMode: "darken",
         borderRadius: 8,
       }}
@@ -29,17 +35,17 @@ function MajorBossCell({ boss }) {
       <Tooltip id={boss.id} />
       {bossStatusCounter % 2 === 1 && (
         <button
-          className="w-[48px] h-[48px]"
+          className="w-[32px] h-[32px]"
           style={{
             backgroundColor: "#ffffff",
+            backgroundImage: `url("./assets/item-icons/dna.png")`,
+            backgroundSize: "cover",
             opacity: 1,
             borderColor: "#000000",
             borderWidth: 1,
             borderRadius: "50%",
           }}
-        >
-          <div className="text-sm">DNA</div>
-        </button>
+        ></button>
       )}
     </div>
   );
