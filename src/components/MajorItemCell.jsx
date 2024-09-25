@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import locations from "../data/locations";
 
-function MajorItemCell({ item }) {
-  const [locationState, setLocationState] = useState(0);
+function MajorItemCell({ item, startingLocation }) {
+  const [locationState, setLocationState] = useState(
+    startingLocation === "S" ? 9 : 0
+  );
   const [upgradeCounter, setUpgradeCounter] = useState(0);
-  const [itemObtained, setItemObtained] = useState(false);
+  const [itemObtained, setItemObtained] = useState(startingLocation === "S");
 
   function incrementLocationState(e) {
     if (e.currentTarget === e.target) e.stopPropagation();
@@ -53,7 +55,7 @@ function MajorItemCell({ item }) {
           borderRadius: "50%",
         }}
       >
-        <div className="text-sm">{locations[locationState]}</div>
+        <div className="text-sm">{locations[locationState].initial}</div>
       </button>
       {item.maxUpgrades > 0 && (
         <button

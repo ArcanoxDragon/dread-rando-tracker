@@ -26,7 +26,7 @@ function MajorBosses({ settings }) {
             <MajorBossCell
               key={boss.id}
               boss={boss}
-              hasDna={settings.allMajorBossesHaveDna}
+              alwaysHasDna={settings.allMajorBossesHaveDna}
             />
           );
         })}

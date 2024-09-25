@@ -9,6 +9,7 @@ function SettingsScreen({ doneConfiguring }) {
   const [hasProgressiveSuit, setHasProgressiveSuit] = useState(false);
   const [speedBoosterHasUpgrades, setSpeedBoosterHasUpgrades] = useState(false);
   const [flashShiftHasUpgrades, setFlashShiftHasUpgrades] = useState(false);
+  const [startWithPulseRadar, setStartWithPulseRadar] = useState(false);
   const [allMajorBossesHaveDna, setAllMajorBossesHaveDna] = useState(false);
 
   return (
@@ -93,6 +94,14 @@ function SettingsScreen({ doneConfiguring }) {
             <label className="dark:text-white">
               <input
                 type="checkbox"
+                checked={startWithPulseRadar}
+                onChange={() => setStartWithPulseRadar(!startWithPulseRadar)}
+              />
+              Start with Pulse Radar
+            </label>
+            <label className="dark:text-white">
+              <input
+                type="checkbox"
                 checked={allMajorBossesHaveDna}
                 onChange={() =>
                   setAllMajorBossesHaveDna(!allMajorBossesHaveDna)
@@ -115,6 +124,7 @@ function SettingsScreen({ doneConfiguring }) {
                 progressiveSuit: hasProgressiveSuit,
                 flashShiftHasUpgrades: flashShiftHasUpgrades,
                 speedBoosterHasUpgrades: speedBoosterHasUpgrades,
+                startWithPulseRadar: startWithPulseRadar,
                 allMajorBossesHaveDna: allMajorBossesHaveDna,
               };
 

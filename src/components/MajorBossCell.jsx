@@ -1,22 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Tooltip } from "react-tooltip";
+import locations from "../data/locations";
 
-function MajorBossCell({ boss, hasDna }) {
-  const [bossStatusCounter, setBossStatusCounter] = useState(0);
-
-  function incrementBossStatusCounter(e) {
-    if (bossStatusCounter >= 3) {
-      setBossStatusCounter(0);
-    } else {
-      setBossStatusCounter(bossStatusCounter + 1);
-    }
-  }
-
-  useEffect(() => {
-    if (hasDna) {
-      setBossStatusCounter(1);
-    }
-  }, []);
+function MajorBossCell({ boss, alwaysHasDna }) {
+  const [isBossDefeated, setIsBossDefeated] = useState(false);
+  const [doesBossHaveDna, setDoesBossHaveDna] = useState(alwaysHasDna);
 
   return (
     <div
@@ -26,14 +14,28 @@ function MajorBossCell({ boss, hasDna }) {
       style={{
         backgroundImage: `url(${boss.icon})`,
         backgroundSize: "contain",
-        backgroundColor: `rgb(10,10,10,${bossStatusCounter > 1 ? 0.75 : 0})`,
+        backgroundClip: "padding-box",
+        backgroundColor: `rgb(10,10,10,${isBossDefeated ? 0.75 : 0})`,
         backgroundBlendMode: "darken",
         borderRadius: 8,
+        borderColor:
+          locations[locations.findIndex((l) => boss.location === l.name)].color,
+        borderWidth: isBossDefeated ? 0 : 2,
+        padding: !isBossDefeated ? 0 : 2,
       }}
-      onClick={(e) => incrementBossStatusCounter(e)}
+      onClick={(e) => {
+        e.preventDefault();
+        setIsBossDefeated(!isBossDefeated);
+      }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        if (!alwaysHasDna) {
+          setDoesBossHaveDna(!doesBossHaveDna);
+        }
+      }}
     >
-      <Tooltip id={boss.id} />
-      {bossStatusCounter % 2 === 1 && (
+      <Tooltip id={boss.id} style={{ userSelect: "none" }} />
+      {doesBossHaveDna && (
         <button
           className="w-[32px] h-[32px]"
           style={{

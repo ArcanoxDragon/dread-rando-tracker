@@ -24,7 +24,16 @@ function MajorItems({ settings }) {
             return <MajorProgressiveItemCell key={item.id} item={item} />;
           } else if (item.type === "single") {
             return (
-              <MajorItemCell key={item.id} item={item} hasUpgrades={false} />
+              <MajorItemCell
+                key={item.id}
+                item={item}
+                hasUpgrades={false}
+                startingLocation={
+                  settings.startWithPulseRadar && item.name == "Pulse Radar"
+                    ? "S"
+                    : "?"
+                }
+              />
             );
           }
         })}

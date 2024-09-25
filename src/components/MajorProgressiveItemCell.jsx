@@ -55,7 +55,7 @@ function MajorProgressiveItemCell({ item }) {
           borderRadius: "50%",
         }}
       >
-        <div className="text-sm">{locations[locationState]}</div>
+        <div className="text-sm">{locations[locationState].initial}</div>
       </button>
     </div>
   );
