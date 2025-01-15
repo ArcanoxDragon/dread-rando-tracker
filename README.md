@@ -19,7 +19,7 @@ Select options, then press "Open Tracker". This tracker is controlled with both 
 
 ### Major Items
 
-Left-click on an item to toggle between obtained and not obtained. If you get a hint from a Network Station, left-click in the top-left corner to cycle through ZDR's major areas to reflect where the hint said the item was. If you get a Speed Booster or Flash Shift upgrade, left-click in the bottom-right corner to increment your upgrade count.
+Left-click on an item to toggle between obtained and not obtained. If you get a hint from a Network Station, left-click in the top-left corner to cycle through ZDR's major areas to reflect where the hint said the item was. (You can cycle in reverse by clicking the right mouse button instead.) If you get a Speed Booster or Flash Shift upgrade, left-click in the bottom-right corner to increment your upgrade count.
 
 ### Major Bosses
 
