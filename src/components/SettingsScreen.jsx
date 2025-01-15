@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { loadPreviousSettings, saveSettings } from "../utilities/settings";
 
 function SettingsScreen({ doneConfiguring }) {
   const [hasProgressiveBeam, setHasProgressiveBeam] = useState(false);
@@ -11,6 +12,21 @@ function SettingsScreen({ doneConfiguring }) {
   const [flashShiftHasUpgrades, setFlashShiftHasUpgrades] = useState(false);
   const [startWithPulseRadar, setStartWithPulseRadar] = useState(false);
   const [allMajorBossesHaveDna, setAllMajorBossesHaveDna] = useState(false);
+
+  useEffect(() => {
+    const previousSettings = loadPreviousSettings();
+
+    setHasProgressiveBeam(previousSettings.progressiveBeam ?? false);
+    setHasProgressiveCharge(previousSettings.progressiveCharge ?? false);
+    setHasProgressiveBomb(previousSettings.progressiveBomb ?? false);
+    setHasProgressiveMissile(previousSettings.progressiveMissile ?? false);
+    setHasProgressiveSpin(previousSettings.progressiveSpin ?? false);
+    setHasProgressiveSuit(previousSettings.progressiveSuit ?? false);
+    setSpeedBoosterHasUpgrades(previousSettings.speedBoosterHasUpgrades ?? false);
+    setFlashShiftHasUpgrades(previousSettings.flashShiftHasUpgrades ?? false);
+    setStartWithPulseRadar(previousSettings.startWithPulseRadar ?? false);
+    setAllMajorBossesHaveDna(previousSettings.allMajorBossesHaveDna ?? false);
+  }, []);
 
   return (
     <div className="container">
@@ -128,6 +144,7 @@ function SettingsScreen({ doneConfiguring }) {
                 allMajorBossesHaveDna: allMajorBossesHaveDna,
               };
 
+              saveSettings(settings);
               doneConfiguring(settings);
             }}
           >
