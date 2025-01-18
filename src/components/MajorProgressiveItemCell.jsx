@@ -62,7 +62,7 @@ function MajorProgressiveItemCell({ item }) {
       <button
         className="w-[24px] h-[24px]"
         onClick={(e) => incrementLocationState(e)}
-        onContextMenu={(e) => { decrementLocationState(e); }}
+        onContextMenu={(e) => decrementLocationState(e)}
         style={{
           backgroundColor: "#ffffff",
           opacity: 1,
