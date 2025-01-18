@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import locations from "../data/locations";
+import { useLocationHotkeys } from "../utilities/hotkeys";
 
 function MajorItemCell({ item, startingLocation }) {
   const [locationState, setLocationState] = useState(
@@ -9,33 +10,9 @@ function MajorItemCell({ item, startingLocation }) {
   const [upgradeCounter, setUpgradeCounter] = useState(0);
   const [itemObtained, setItemObtained] = useState(startingLocation === "S");
   const [mouseOver, setMouseOver] = useState(false);
-  const mouseOverRef = useRef(false); // expose state through this to avoid constantly attaching/detaching window listener
+  const hotkeysDisabled = startingLocation === "S";
 
-  useEffect(() => { mouseOverRef.current = mouseOver; }, [mouseOver]);
-
-  useEffect(() => {
-    const handleKeyDown = e => {
-      if (!mouseOverRef.current || startingLocation === "S") {
-        return;
-      }
-
-      if (e.key === "?" || e.key === "Backspace" || e.key === "Delete") {
-        // Clear location
-        setLocationState(0);
-      } else if (e.key.toUpperCase() === "S") {
-        // Starting
-        setLocationState(9);
-      } else if (/^[a-h]$/i.test(e.key)) {
-        const locationState = 1 + (e.key.toUpperCase().charCodeAt(0) - "A".charCodeAt(0)); // A = 1, B = 2, etc.
-
-        setLocationState(locationState);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown, { capture: true });
-
-    return () => window.removeEventListener("keydown", handleKeyDown, { capture: true });
-  }, []);
+  useLocationHotkeys(mouseOver, setLocationState, hotkeysDisabled);
 
   function incrementLocationState(e) {
     if (e.currentTarget === e.target) e.stopPropagation();

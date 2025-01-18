@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import locations from "../data/locations";
+import { useLocationHotkeys } from "../utilities/hotkeys";
 
 function MajorProgressiveItemCell({ item }) {
   const [locationState, setLocationState] = useState(0);
   const [currentProgressiveItemState, setCurrentProgressiveItemState] =
     useState(0);
+  const [mouseOver, setMouseOver] = useState(false);
+
+  useLocationHotkeys(mouseOver, setLocationState);
 
   function incrementLocationState(e) {
     if (e.currentTarget === e.target) e.stopPropagation();
@@ -13,6 +17,16 @@ function MajorProgressiveItemCell({ item }) {
       setLocationState(0);
     } else {
       setLocationState(locationState + 1);
+    }
+  }
+
+  function decrementLocationState(e) {
+    if (e.currentTarget === e.target) e.stopPropagation();
+    e.preventDefault();
+    if (locationState <= 0) {
+      setLocationState(locations.length - 1);
+    } else {
+      setLocationState(locationState - 1);
     }
   }
 
@@ -33,20 +47,22 @@ function MajorProgressiveItemCell({ item }) {
       style={{
         backgroundImage: `url(${item.icons[currentProgressiveItemState]})`,
         backgroundSize: "contain",
-        backgroundColor: `rgb(30,41,59,${
-          currentProgressiveItemState === 0 ? 0.75 : 0
-        })`,
+        backgroundColor: `rgb(30,41,59,${currentProgressiveItemState === 0 ? 0.75 : 0
+          })`,
         backgroundBlendMode: "darken",
       }}
       onClick={(e) => {
         if (e.currentTarget !== e.target) return;
         incrementProgressiveItemState(e);
       }}
+      onMouseEnter={() => setMouseOver(true)}
+      onMouseLeave={() => setMouseOver(false)}
     >
       <Tooltip id={item.id} />
       <button
         className="w-[24px] h-[24px]"
         onClick={(e) => incrementLocationState(e)}
+        onContextMenu={(e) => { decrementLocationState(e); }}
         style={{
           backgroundColor: "#ffffff",
           opacity: 1,
