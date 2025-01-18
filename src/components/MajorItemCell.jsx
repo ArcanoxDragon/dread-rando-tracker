@@ -42,6 +42,16 @@ function MajorItemCell({ item, startingLocation }) {
     }
   }
 
+  function decrementUpgradeCounter(e) {
+    if (e.currentTarget === e.target) e.stopPropagation();
+    e.preventDefault();
+    if (upgradeCounter <= 0) {
+      setUpgradeCounter(item.maxUpgrades);
+    } else {
+      setUpgradeCounter(upgradeCounter - 1);
+    }
+  }
+
   let backgroundAlpha = 0.75;
 
   if (mouseOver && itemObtained) {
@@ -89,6 +99,7 @@ function MajorItemCell({ item, startingLocation }) {
         <button
           className="w-[24px] h-[24px] self-end"
           onClick={(e) => incrementUpgradeCounter(e)}
+          onContextMenu={(e) => decrementUpgradeCounter(e)}
           style={{
             backgroundColor: "#ffffff",
             opacity: 1,
