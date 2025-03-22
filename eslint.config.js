@@ -5,7 +5,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
-export default [
+export default tseslint.config(
 	{ ignores: ["dist"] },
 	{
 		files: [
@@ -15,6 +15,7 @@ export default [
 		languageOptions: {
 			ecmaVersion: 2022,
 			globals: globals.browser,
+			parser: tseslint.parser,
 			parserOptions: {
 				ecmaVersion: "latest",
 				ecmaFeatures: { jsx: true },
@@ -28,17 +29,15 @@ export default [
 			"react-refresh": reactRefresh,
 		},
 		rules: {
-			...js.configs.recommended.rules,
 			...react.configs.recommended.rules,
 			...react.configs["jsx-runtime"].rules,
 			...reactHooks.configs.recommended.rules,
-			...tseslint.configs.recommended.rules,
 			"react/jsx-no-target-blank": "off",
 			"react-refresh/only-export-components": [
 				"warn",
 				{ allowConstantExport: true },
 			],
-			"react/prop-types": false,
+			"react/prop-types": "off",
 		},
 	},
-];
+);
