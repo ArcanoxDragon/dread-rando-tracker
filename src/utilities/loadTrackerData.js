@@ -25,82 +25,82 @@ import pulseRadar from "../data/pulseRadar";
 import majorBosses from "../data/majorBosses";
 
 export function getItemData(itemsSettings) {
-  let buildItemList = [];
-  if (itemsSettings?.progressiveBeam) {
-    buildItemList = buildItemList.concat(progressiveBeam);
-  } else {
-    buildItemList = buildItemList.concat(singleBeam);
-  }
+	let buildItemList = [];
+	if (itemsSettings?.progressiveBeam) {
+		buildItemList = buildItemList.concat(progressiveBeam);
+	} else {
+		buildItemList = buildItemList.concat(singleBeam);
+	}
 
-  if (itemsSettings?.progressiveCharge) {
-    buildItemList = buildItemList.concat(progressiveCharge);
-  } else {
-    buildItemList = buildItemList.concat(singleCharge);
-  }
+	if (itemsSettings?.progressiveCharge) {
+		buildItemList = buildItemList.concat(progressiveCharge);
+	} else {
+		buildItemList = buildItemList.concat(singleCharge);
+	}
 
-  buildItemList = buildItemList.concat(grappleBeam);
-  buildItemList = buildItemList.concat(morphBall);
+	buildItemList = buildItemList.concat(grappleBeam);
+	buildItemList = buildItemList.concat(morphBall);
 
-  if (itemsSettings?.progressiveBomb) {
-    buildItemList = buildItemList.concat(progressiveBomb);
-  } else {
-    buildItemList = buildItemList.concat(singleBomb);
-  }
+	if (itemsSettings?.progressiveBomb) {
+		buildItemList = buildItemList.concat(progressiveBomb);
+	} else {
+		buildItemList = buildItemList.concat(singleBomb);
+	}
 
-  buildItemList = buildItemList.concat(powerBomb);
+	buildItemList = buildItemList.concat(powerBomb);
 
-  if (itemsSettings?.progressiveMissile) {
-    buildItemList = buildItemList.concat(progressiveMissile);
-  } else {
-    buildItemList = buildItemList.concat(singleMissile);
-  }
+	if (itemsSettings?.progressiveMissile) {
+		buildItemList = buildItemList.concat(progressiveMissile);
+	} else {
+		buildItemList = buildItemList.concat(singleMissile);
+	}
 
-  buildItemList = buildItemList.concat(stormMissile);
-  buildItemList = buildItemList.concat(spiderMagnet);
+	buildItemList = buildItemList.concat(stormMissile);
+	buildItemList = buildItemList.concat(spiderMagnet);
 
-  if (itemsSettings?.speedBoosterHasUpgrades) {
-    buildItemList = buildItemList.concat(speedBoosterUpgrades);
-  } else {
-    buildItemList = buildItemList.concat(speedBooster);
-  }
+	if (itemsSettings?.speedBoosterHasUpgrades) {
+		buildItemList = buildItemList.concat(speedBoosterUpgrades);
+	} else {
+		buildItemList = buildItemList.concat(speedBooster);
+	}
 
-  if (itemsSettings?.progressiveSpin) {
-    buildItemList = buildItemList.concat(progressiveSpin);
-  } else {
-    buildItemList = buildItemList.concat(singleJump);
-  }
+	if (itemsSettings?.progressiveSpin) {
+		buildItemList = buildItemList.concat(progressiveSpin);
+	} else {
+		buildItemList = buildItemList.concat(singleJump);
+	}
 
-  buildItemList = buildItemList.concat(screwAttack);
+	buildItemList = buildItemList.concat(screwAttack);
 
-  if (itemsSettings?.progressiveSuit) {
-    buildItemList = buildItemList.concat(progressiveSuit);
-  } else {
-    buildItemList = buildItemList.concat(singleSuit);
-  }
+	if (itemsSettings?.progressiveSuit) {
+		buildItemList = buildItemList.concat(progressiveSuit);
+	} else {
+		buildItemList = buildItemList.concat(singleSuit);
+	}
 
-  buildItemList = buildItemList.concat(phantomCloak);
+	buildItemList = buildItemList.concat(phantomCloak);
 
-  if (itemsSettings?.flashShiftHasUpgrades) {
-    buildItemList = buildItemList.concat(flashShiftUpgrades);
-  } else {
-    buildItemList = buildItemList.concat(flashShift);
-  }
+	if (itemsSettings?.flashShiftHasUpgrades) {
+		buildItemList = buildItemList.concat(flashShiftUpgrades);
+	} else {
+		buildItemList = buildItemList.concat(flashShift);
+	}
 
-  buildItemList = buildItemList.concat(pulseRadar);
+	buildItemList = buildItemList.concat(pulseRadar);
 
-  return buildItemList;
+	return buildItemList;
 }
 
 export function getBossData() {
-  return majorBosses;
+	return majorBosses;
 }
 
 export function getImagesToPreload() {
-  const itemImages = getItemData().map((item) => item.icon);
-  const bossImages = getBossData().map((item) => item.icon);
+	const itemImages = getItemData().map((item) => item.icon);
+	const bossImages = getBossData().map((item) => item.icon);
 
-  return itemImages.concat(bossImages, [
-    "./assets/go.png",
-    "./assets/item-icons/dna.png",
-  ]);
+	return itemImages.concat(bossImages, [
+		"./assets/go.png",
+		"./assets/item-icons/dna.png",
+	]);
 }
