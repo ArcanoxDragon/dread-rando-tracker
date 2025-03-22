@@ -1,30 +1,35 @@
 import { useCallback, useState } from "react";
 import { Tooltip } from "react-tooltip";
-import locations from "../data/locations";
-import { SingleMajorItem } from "../data/types";
 import { useLocationHotkeys } from "../utilities/hotkeys";
+import { SingleItemState } from "../store/SingleItemState";
+import locations from "../data/locations";
+import { observer } from "mobx-react-lite";
 
 export interface MajorItemCellProps {
-	item: SingleMajorItem;
-	startingLocation: string;
+	itemState: SingleItemState;
 }
 
-export default function MajorItemCell({ item, startingLocation }: MajorItemCellProps) {
-	const [locationState, setLocationState] = useState(startingLocation === "S" ? 9 : 0);
-	const [upgradeCounter, setUpgradeCounter] = useState(0);
-	const [itemObtained, setItemObtained] = useState(startingLocation === "S");
+const MajorItemCell = observer(({ itemState }: MajorItemCellProps) => {
 	const [mouseOver, setMouseOver] = useState(false);
-	const hotkeysDisabled = startingLocation === "S";
+	const hotkeysDisabled = itemState.startingLocation === locations.Starting;
 
-	useLocationHotkeys(mouseOver, setLocationState, hotkeysDisabled);
+	useLocationHotkeys(mouseOver, itemState, hotkeysDisabled);
+
+	const toggleCollected = useCallback((e: React.MouseEvent) => {
+		if (e.currentTarget !== e.target) {
+			return;
+		}
+
+		itemState.toggleCollected();
+	}, [itemState]);
 
 	const incrementLocationState = useCallback((e: React.MouseEvent) => {
 		if (e.currentTarget === e.target) {
 			e.stopPropagation();
 		}
 
-		setLocationState(state => (state + 1) % locations.length);
-	}, []);
+		itemState.incrementLocation();
+	}, [itemState]);
 
 	const decrementLocationState = useCallback((e: React.MouseEvent) => {
 		e.preventDefault();
@@ -33,16 +38,16 @@ export default function MajorItemCell({ item, startingLocation }: MajorItemCellP
 			e.stopPropagation();
 		}
 
-		setLocationState(state => state <= 0 ? (locations.length - 1) : (state - 1));
-	}, []);
+		itemState.decrementLocation();
+	}, [itemState]);
 
 	const incrementUpgradeCounter = useCallback((e: React.MouseEvent) => {
 		if (e.currentTarget === e.target) {
 			e.stopPropagation();
 		}
 
-		setUpgradeCounter(state => (state + 1) % item.maxUpgrades);
-	}, [item]);
+		itemState.incrementUpgradeCount();
+	}, [itemState]);
 
 	const decrementUpgradeCounter = useCallback((e: React.MouseEvent) => {
 		e.preventDefault();
@@ -51,38 +56,36 @@ export default function MajorItemCell({ item, startingLocation }: MajorItemCellP
 			e.stopPropagation();
 		}
 
-		setUpgradeCounter(state => state <= 0 ? (locations.length - 1) : (state - 1));
-	}, []);
+		itemState.decrementUpgradeCount();
+	}, [itemState]);
 
 	let backgroundAlpha = 0.75;
 
-	if (mouseOver && itemObtained) {
+	if (mouseOver && itemState.collected) {
 		backgroundAlpha = 0.15;
 	} else if (mouseOver) {
 		backgroundAlpha = 0.65;
-	} else if (itemObtained) {
+	} else if (itemState.collected) {
 		backgroundAlpha = 0;
 	}
 
 	return (
 		<div
-			data-tooltip-id={item.id}
-			data-tooltip-content={item.name}
+			data-tooltip-id={itemState.item.id}
+			data-tooltip-content={itemState.item.name}
 			className="w-[64px] h-[64px] flex justify-between"
 			style={{
-				backgroundImage: `url(${item.icon})`,
+				backgroundImage: `url(${itemState.item.icon})`,
 				backgroundSize: "contain",
 				backgroundColor: `rgb(30,41,59,${backgroundAlpha})`,
 				backgroundBlendMode: "darken",
 			}}
-			onClick={(e) => {
-				if (e.currentTarget !== e.target) return;
-				setItemObtained(!itemObtained);
-			}}
+			onClick={toggleCollected}
+			onDoubleClick={e => e.preventDefault()}
 			onMouseEnter={() => setMouseOver(true)}
 			onMouseLeave={() => setMouseOver(false)}
 		>
-			<Tooltip id={item.id} />
+			<Tooltip id={itemState.item.id} />
 			<button
 				className="w-[24px] h-[24px]"
 				onClick={incrementLocationState}
@@ -95,9 +98,9 @@ export default function MajorItemCell({ item, startingLocation }: MajorItemCellP
 					borderRadius: "50%",
 				}}
 			>
-				<div className="text-sm">{locations[locationState].initial}</div>
+				<div className="text-sm">{itemState.location.initial}</div>
 			</button>
-			{item.maxUpgrades > 0 && (
+			{itemState.item.maxUpgrades > 0 && (
 				<button
 					className="w-[24px] h-[24px] self-end"
 					onClick={incrementUpgradeCounter}
@@ -110,9 +113,11 @@ export default function MajorItemCell({ item, startingLocation }: MajorItemCellP
 						borderRadius: "50%",
 					}}
 				>
-					<div className="text-sm">{upgradeCounter}</div>
+					<div className="text-sm">{itemState.upgradeCount}</div>
 				</button>
 			)}
 		</div>
 	);
-}
+});
+
+export default MajorItemCell;

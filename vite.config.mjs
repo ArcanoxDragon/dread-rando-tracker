@@ -7,7 +7,15 @@ import eslint from "vite-plugin-eslint2";
 export default defineConfig({
 	plugins: [
 		eslint(),
-		react(),
+		react({
+			useAtYourOwnRisk_mutateSwcOptions: o => {
+				o.jsc ??= {};
+				o.jsc.parser ??= {};
+				o.jsc.parser.decorators = true;
+				o.jsc.transform ??= {};
+				o.jsc.transform.decoratorVersion = "2022-03";
+			},
+		}),
 		tailwindcss(),
 	],
 	base: "https://randomizer.hijumpboots.com/tracker/",

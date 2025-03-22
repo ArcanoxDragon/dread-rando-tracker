@@ -1,6 +1,6 @@
-import { ItemLocation } from "./types";
+import { ResourceLocation, LocationKey } from "./types";
 
-const locations: ItemLocation[] = [
+const locationsArray: ResourceLocation[] = [
 	{ name: "Unknown", initial: "?", color: "#ffffff" },
 	{ name: "Artaria", initial: "A", color: "#B8A853" },
 	{ name: "Burenia", initial: "B", color: "#4787AF" },
@@ -12,5 +12,13 @@ const locations: ItemLocation[] = [
 	{ name: "Hanubia", initial: "H", color: "#D68845" },
 	{ name: "Starting", initial: "S", color: "#ffffff" },
 ];
+
+export type Locations = ResourceLocation[] & { [Key in LocationKey]: ResourceLocation };
+
+const locations: Locations = [...locationsArray] as Locations;
+
+for (const location of locations) {
+	locations[location.name] = location;
+}
 
 export default locations;

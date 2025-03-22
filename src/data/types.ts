@@ -1,4 +1,6 @@
 export type LocationKey =
+	| "Unknown"
+	| "Starting"
 	| "Artaria"
 	| "Burenia"
 	| "Cataris"
@@ -9,8 +11,8 @@ export type LocationKey =
 	| "Hanubia"
 	| "Itorash";
 
-export interface ItemLocation {
-	name: LocationKey | "Unknown" | "Starting";
+export interface ResourceLocation {
+	name: LocationKey;
 	initial: string;
 	color: string;
 }

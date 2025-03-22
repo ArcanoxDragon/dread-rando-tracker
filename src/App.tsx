@@ -1,25 +1,22 @@
 import { useCallback, useState } from "react";
+import { TrackerSettings } from "./utilities/settings";
+import { TrackerStore } from "./store/TrackerStore";
 import SettingsScreen from "./components/SettingsScreen";
 import Tracker from "./components/Tracker";
-import { TrackerSettings } from "./utilities/settings";
 
 function App() {
-	const [isTrackerReady, setIsTrackerReady] = useState(false);
-	const [trackerSettings, setTrackerSettings] = useState({});
+	const [trackerStore, setTrackerStore] = useState<TrackerStore | null>(null);
 
-	const updateSettings = useCallback((settings: TrackerSettings) => {
-		setTrackerSettings(settings);
-		setIsTrackerReady(true);
+	const onDoneConfiguring = useCallback((settings: TrackerSettings) => {
+		setTrackerStore(new TrackerStore(settings));
 	}, []);
 
 	return (
 		<div className="container">
-			{isTrackerReady ? (
-				<Tracker settings={trackerSettings} />
+			{trackerStore ? (
+				<Tracker store={trackerStore} />
 			) : (
-				<SettingsScreen
-					doneConfiguring={(settings) => updateSettings(settings)}
-				/>
+				<SettingsScreen doneConfiguring={onDoneConfiguring} />
 			)}
 		</div>
 	);

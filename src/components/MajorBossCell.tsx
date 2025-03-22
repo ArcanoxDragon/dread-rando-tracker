@@ -1,47 +1,53 @@
-import { useState } from "react";
+import { useCallback } from "react";
 import { Tooltip } from "react-tooltip";
-import locations from "../data/locations";
-import { MajorBoss } from "../data/types";
+import { BossState } from "../store/BossState";
+import { observer } from "mobx-react-lite";
 
 export interface MajorBossCellProps {
-	boss: MajorBoss;
-	alwaysHasDna: boolean;
+	bossState: BossState;
 }
 
-export default function MajorBossCell({ boss, alwaysHasDna }: MajorBossCellProps) {
-	const [isBossDefeated, setIsBossDefeated] = useState(false);
-	const [doesBossHaveDna, setDoesBossHaveDna] = useState(alwaysHasDna);
+const MajorBossCell = observer(({ bossState }: MajorBossCellProps) => {
+	const toggleDefeated = useCallback((e: React.MouseEvent) => {
+		if (e.currentTarget !== e.target) {
+			return;
+		}
+
+		bossState.toggleDefeated();
+	}, [bossState]);
+
+	const toggleHasDna = useCallback((e: React.MouseEvent) => {
+		e.preventDefault();
+
+		if (e.currentTarget !== e.target || bossState.initialHasDna) {
+			return;
+		}
+
+		bossState.toggleHasDna();
+	}, [bossState]);
 
 	return (
 		<div
 			className="w-[64px] h-[64px] flex justify-end items-end"
-			data-tooltip-id={boss.id}
-			data-tooltip-content={boss.name}
+			data-tooltip-id={bossState.boss.id}
+			data-tooltip-content={bossState.boss.name}
 			style={{
-				backgroundImage: `url(${boss.icon})`,
+				backgroundImage: `url(${bossState.boss.icon})`,
 				backgroundSize: "contain",
 				backgroundClip: "padding-box",
-				backgroundColor: `rgb(10,10,10,${isBossDefeated ? 0.75 : 0})`,
+				backgroundColor: `rgb(10,10,10,${bossState.defeated ? 0.75 : 0})`,
 				backgroundBlendMode: "darken",
 				borderRadius: 8,
-				borderColor:
-					locations[locations.findIndex((l) => boss.location === l.name)].color,
-				borderWidth: isBossDefeated ? 0 : 2,
-				padding: !isBossDefeated ? 0 : 2,
+				borderColor: bossState.location.color,
+				borderWidth: bossState.defeated ? 0 : 2,
+				padding: !bossState.defeated ? 0 : 2,
 			}}
-			onClick={(e) => {
-				e.preventDefault();
-				setIsBossDefeated(!isBossDefeated);
-			}}
-			onContextMenu={(e) => {
-				e.preventDefault();
-				if (!alwaysHasDna) {
-					setDoesBossHaveDna(!doesBossHaveDna);
-				}
-			}}
+			onClick={toggleDefeated}
+			onContextMenu={toggleHasDna}
+			onDoubleClick={e => e.preventDefault()}
 		>
-			<Tooltip id={boss.id} style={{ userSelect: "none" }} />
-			{doesBossHaveDna && (
+			<Tooltip id={bossState.boss.id} style={{ userSelect: "none" }} />
+			{bossState.hasDna && (
 				<button
 					className="w-[32px] h-[32px]"
 					style={{
@@ -57,4 +63,6 @@ export default function MajorBossCell({ boss, alwaysHasDna }: MajorBossCellProps
 			)}
 		</div>
 	);
-}
+});
+
+export default MajorBossCell;

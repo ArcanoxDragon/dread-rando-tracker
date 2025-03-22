@@ -1,24 +1,11 @@
 import MajorBossCell from "./MajorBossCell";
-import { useEffect, useState } from "react";
-import { getBossData } from "../utilities/loadTrackerData";
-import { TrackerSettings } from "../utilities/settings";
-import { MajorBoss } from "../data/types";
+import { BossState } from "../store/BossState";
 
 export interface MajorBossesProps {
-	settings: TrackerSettings;
+	bosses: readonly BossState[];
 }
 
-export default function MajorBosses({ settings }: MajorBossesProps) {
-	const [bosses, setBosses] = useState<MajorBoss[]>([]);
-
-	useEffect(() => {
-		const bossesList = getBossData();
-
-		// finalize item config
-
-		setBosses(bossesList);
-	}, []);
-
+export default function MajorBosses({ bosses }: MajorBossesProps) {
 	return (
 		<div className="px-3">
 			<div className="flex justify-between">
@@ -26,14 +13,8 @@ export default function MajorBosses({ settings }: MajorBossesProps) {
 			</div>
 
 			<div className="grid grid-cols-6 gap-2">
-				{bosses.map((boss) => {
-					return (
-						<MajorBossCell
-							key={boss.id}
-							boss={boss}
-							alwaysHasDna={settings.allMajorBossesHaveDna}
-						/>
-					);
+				{bosses.map(bossState => {
+					return <MajorBossCell key={bossState.boss.id} bossState={bossState} />;
 				})}
 			</div>
 		</div>

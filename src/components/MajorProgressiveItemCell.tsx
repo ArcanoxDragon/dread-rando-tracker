@@ -1,83 +1,84 @@
 import { useCallback, useState } from "react";
 import { Tooltip } from "react-tooltip";
-import { ProgressiveMajorItem } from "../data/types";
-import locations from "../data/locations";
 import { useLocationHotkeys } from "../utilities/hotkeys";
+import { ProgressiveItemState } from "../store/ProgressiveItemState";
+import { observer } from "mobx-react-lite";
+import locations from "../data/locations";
 
 export interface MajorProgressiveItemCellProps {
-	item: ProgressiveMajorItem;
+	itemState: ProgressiveItemState;
 }
 
-export default function MajorProgressiveItemCell({ item }: MajorProgressiveItemCellProps) {
-	const [locationState, setLocationState] = useState(0);
-	const [progressionState, setProgressionState] = useState(0);
+const MajorProgressiveItemCell = observer(({ itemState }: MajorProgressiveItemCellProps) => {
 	const [mouseOver, setMouseOver] = useState(false);
+	const hotkeysDisabled = itemState.startingLocation === locations.Starting;
 
-	useLocationHotkeys(mouseOver, setLocationState);
+	useLocationHotkeys(mouseOver, itemState, hotkeysDisabled);
 
 	const incrementLocationState = useCallback((e: React.MouseEvent) => {
-		if (e.currentTarget === e.target) {
-			e.stopPropagation();
+		if (e.currentTarget !== e.target) {
+			return;
 		}
 
-		setLocationState(state => (state + 1) % locations.length);
-	}, []);
+		itemState.incrementLocation();
+	}, [itemState]);
 
 	const decrementLocationState = useCallback((e: React.MouseEvent) => {
 		e.preventDefault();
 
-		if (e.currentTarget === e.target) {
-			e.stopPropagation();
+		if (e.currentTarget !== e.target) {
+			return;
 		}
 
-		setLocationState(state => state <= 0 ? (locations.length - 1) : (state - 1));
-	}, []);
+		itemState.decrementLocation();
+	}, [itemState]);
 
 	const incrementProgressionState = useCallback((e: React.MouseEvent) => {
-		if (e.currentTarget === e.target) {
-			e.stopPropagation();
+		if (e.currentTarget !== e.target) {
+			return;
 		}
 
-		setProgressionState(state => (state + 1) % item.icons.length);
-	}, [item]);
+		itemState.incrementProgression();
+	}, [itemState]);
 
 	const decrementProgressionState = useCallback((e: React.MouseEvent) => {
 		e.preventDefault();
 
-		if (e.currentTarget === e.target) {
-			e.stopPropagation();
+		if (e.currentTarget !== e.target) {
+			return;
 		}
 
-		setProgressionState(state => state <= 0 ? (locations.length - 1) : (state - 1));
-	}, []);
+		itemState.decrementProgression();
+	}, [itemState]);
 
 	let backgroundAlpha = 0.75;
 
-	if (mouseOver && progressionState > 0) {
+	if (mouseOver && itemState.progression > 0) {
 		backgroundAlpha = 0.15;
 	} else if (mouseOver) {
 		backgroundAlpha = 0.65;
-	} else if (progressionState > 0) {
+	} else if (itemState.progression > 0) {
 		backgroundAlpha = 0;
 	}
 
 	return (
 		<div
-			data-tooltip-id={item.id}
-			data-tooltip-content={item.name}
+			data-tooltip-id={itemState.item.id}
+			data-tooltip-content={itemState.item.name}
 			className="w-[64px] h-[64px] flex justify-start"
 			style={{
-				backgroundImage: `url(${item.icons[progressionState]})`,
+				backgroundImage: `url(${itemState.icon})`,
 				backgroundSize: "contain",
 				backgroundColor: `rgb(30,41,59,${backgroundAlpha})`,
 				backgroundBlendMode: "darken",
 			}}
 			onClick={incrementProgressionState}
 			onContextMenu={decrementProgressionState}
+			onDoubleClick={e => e.preventDefault()}
 			onMouseEnter={() => setMouseOver(true)}
 			onMouseLeave={() => setMouseOver(false)}
 		>
-			<Tooltip id={item.id} />
+			<Tooltip id={itemState.item.id} />
 			<button
 				className="w-[24px] h-[24px]"
 				onClick={incrementLocationState}
@@ -90,8 +91,10 @@ export default function MajorProgressiveItemCell({ item }: MajorProgressiveItemC
 					borderRadius: "50%",
 				}}
 			>
-				<div className="text-sm">{locations[locationState].initial}</div>
+				<div className="text-sm">{itemState.location.initial}</div>
 			</button>
 		</div>
 	);
-}
+});
+
+export default MajorProgressiveItemCell;

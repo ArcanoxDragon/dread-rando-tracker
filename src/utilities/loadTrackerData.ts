@@ -26,7 +26,7 @@ import {
 	pulseRadar,
 	majorBosses,
 } from "../data";
-import { MajorItem } from "../data/types";
+import { MajorBoss, MajorItem } from "../data/types";
 
 export function getItemData(itemsSettings: TrackerSettings) {
 	const itemsList: MajorItem[] = [];
@@ -100,9 +100,9 @@ export function getBossData() {
 	return majorBosses;
 }
 
-export function getImagesToPreload(settings: TrackerSettings) {
-	const itemImages = getItemData(settings).flatMap(item => item.type === "progressive" ? item.icons : [item.icon]);
-	const bossImages = getBossData().map(boss => boss.icon);
+export function getImagesToPreload(items: MajorItem[], bosses: MajorBoss[]) {
+	const itemImages = items.flatMap(item => item.type === "progressive" ? item.icons : [item.icon]);
+	const bossImages = bosses.map(boss => boss.icon);
 
 	return itemImages.concat(bossImages, [
 		"./assets/go.png",
