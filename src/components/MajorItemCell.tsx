@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import locations from "../data/locations";
 import { SingleMajorItem } from "../data/types";
+import { useLocationHotkeys } from "../utilities/hotkeys";
 
 export interface MajorItemCellProps {
 	item: SingleMajorItem;
@@ -13,33 +14,9 @@ export default function MajorItemCell({ item, startingLocation }: MajorItemCellP
 	const [upgradeCounter, setUpgradeCounter] = useState(0);
 	const [itemObtained, setItemObtained] = useState(startingLocation === "S");
 	const [mouseOver, setMouseOver] = useState(false);
-	const mouseOverRef = useRef(false); // expose state through this to avoid constantly attaching/detaching window listener
+	const hotkeysDisabled = startingLocation === "S";
 
-	useEffect(() => { mouseOverRef.current = mouseOver; }, [mouseOver]);
-
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (!mouseOverRef.current || startingLocation === "S") {
-				return;
-			}
-
-			if (e.key === "?" || e.key === "Backspace" || e.key === "Delete") {
-				// Clear location
-				setLocationState(0);
-			} else if (e.key.toUpperCase() === "S") {
-				// Starting
-				setLocationState(9);
-			} else if (/^[a-h]$/i.test(e.key)) {
-				const locationState = 1 + (e.key.toUpperCase().charCodeAt(0) - "A".charCodeAt(0)); // A = 1, B = 2, etc.
-
-				setLocationState(locationState);
-			}
-		};
-
-		window.addEventListener("keydown", handleKeyDown, { capture: true });
-
-		return () => window.removeEventListener("keydown", handleKeyDown, { capture: true });
-	}, [startingLocation]);
+	useLocationHotkeys(mouseOver, setLocationState, hotkeysDisabled);
 
 	const incrementLocationState = useCallback((e: React.MouseEvent) => {
 		if (e.currentTarget === e.target) {
@@ -66,6 +43,16 @@ export default function MajorItemCell({ item, startingLocation }: MajorItemCellP
 
 		setUpgradeCounter(state => (state + 1) % item.maxUpgrades);
 	}, [item]);
+
+	const decrementUpgradeCounter = useCallback((e: React.MouseEvent) => {
+		e.preventDefault();
+
+		if (e.currentTarget === e.target) {
+			e.stopPropagation();
+		}
+
+		setUpgradeCounter(state => state <= 0 ? (locations.length - 1) : (state - 1));
+	}, []);
 
 	let backgroundAlpha = 0.75;
 
@@ -114,6 +101,7 @@ export default function MajorItemCell({ item, startingLocation }: MajorItemCellP
 				<button
 					className="w-[24px] h-[24px] self-end"
 					onClick={incrementUpgradeCounter}
+					onContextMenu={decrementUpgradeCounter}
 					style={{
 						backgroundColor: "#ffffff",
 						opacity: 1,
