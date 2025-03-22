@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { loadPreviousSettings, saveSettings, TrackerSettings } from "../utilities/settings";
+import { TrackerStore } from "../store/TrackerStore";
+import { hasSavedState, loadPreviousState } from "../store/persistence";
 
 export interface SettingsScreenProps {
 	doneConfiguring(settings: TrackerSettings): void;
+	loadedPreviousState(store: TrackerStore): void;
 }
 
-export default function SettingsScreen({ doneConfiguring }: SettingsScreenProps) {
+export default function SettingsScreen({ doneConfiguring, loadedPreviousState }: SettingsScreenProps) {
 	const [hasProgressiveBeam, setHasProgressiveBeam] = useState(false);
 	const [hasProgressiveCharge, setHasProgressiveCharge] = useState(false);
 	const [hasProgressiveBomb, setHasProgressiveBomb] = useState(false);
@@ -16,6 +19,7 @@ export default function SettingsScreen({ doneConfiguring }: SettingsScreenProps)
 	const [flashShiftHasUpgrades, setFlashShiftHasUpgrades] = useState(false);
 	const [startWithPulseRadar, setStartWithPulseRadar] = useState(false);
 	const [allMajorBossesHaveDna, setAllMajorBossesHaveDna] = useState(false);
+	const [canLoadPreviousState] = useState(() => hasSavedState());
 
 	useEffect(() => {
 		const previousSettings = loadPreviousSettings();
@@ -31,6 +35,14 @@ export default function SettingsScreen({ doneConfiguring }: SettingsScreenProps)
 		setStartWithPulseRadar(previousSettings.startWithPulseRadar ?? false);
 		setAllMajorBossesHaveDna(previousSettings.allMajorBossesHaveDna ?? false);
 	}, []);
+
+	const onClickLoadPreviousState = useCallback(() => {
+		const store = loadPreviousState();
+
+		if (store) {
+			loadedPreviousState(store);
+		}
+	}, [loadedPreviousState]);
 
 	return (
 		<div className="container">
@@ -132,8 +144,7 @@ export default function SettingsScreen({ doneConfiguring }: SettingsScreenProps)
 					</div>
 
 					<button
-						className="dark:text-white dark:bg-slate-900 text-xl m-2 p-2 text-center"
-						style={{ borderRadius: 16 }}
+						className="dark:text-white dark:bg-slate-900 text-xl m-2 p-2 text-center rounded-lg"
 						onClick={() => {
 							const settings: TrackerSettings = {
 								progressiveBeam: hasProgressiveBeam,
@@ -154,6 +165,15 @@ export default function SettingsScreen({ doneConfiguring }: SettingsScreenProps)
 					>
 						Open Tracker
 					</button>
+
+					{canLoadPreviousState && (
+						<button
+							className="dark:text-white dark:bg-slate-900 text-xl m-2 p-2 text-center rounded-lg"
+							onClick={onClickLoadPreviousState}
+						>
+							Load Previous Session
+						</button>
+					)}
 				</div>
 			</div>
 		</div>
