@@ -16,8 +16,8 @@ const MajorProgressiveItemCell = observer(({ itemState }: MajorProgressiveItemCe
 	useLocationHotkeys(mouseOver, itemState, hotkeysDisabled);
 
 	const incrementLocationState = useCallback((e: React.MouseEvent) => {
-		if (e.currentTarget !== e.target) {
-			return;
+		if (e.currentTarget === e.target) {
+			e.stopPropagation();
 		}
 
 		itemState.incrementLocation();
@@ -26,8 +26,8 @@ const MajorProgressiveItemCell = observer(({ itemState }: MajorProgressiveItemCe
 	const decrementLocationState = useCallback((e: React.MouseEvent) => {
 		e.preventDefault();
 
-		if (e.currentTarget !== e.target) {
-			return;
+		if (e.currentTarget === e.target) {
+			e.stopPropagation();
 		}
 
 		itemState.decrementLocation();
