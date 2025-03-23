@@ -5,6 +5,11 @@ import eslint from "vite-plugin-eslint2";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	esbuild: {
+		supported: {
+			decorators: false,
+		},
+	},
 	plugins: [
 		eslint(),
 		react({
