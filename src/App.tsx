@@ -11,12 +11,19 @@ function App() {
 		setTrackerStore(new TrackerStore(settings));
 	}, []);
 
+	const onLoadedPreviousState = useCallback((store: TrackerStore) => {
+		setTrackerStore(store);
+	}, []);
+
 	return (
 		<div className="container">
 			{trackerStore ? (
 				<Tracker store={trackerStore} />
 			) : (
-				<SettingsScreen doneConfiguring={onDoneConfiguring} />
+				<SettingsScreen
+					doneConfiguring={onDoneConfiguring}
+					loadedPreviousState={onLoadedPreviousState}
+				/>
 			)}
 		</div>
 	);
