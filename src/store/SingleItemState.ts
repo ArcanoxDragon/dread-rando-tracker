@@ -9,10 +9,18 @@ export class SingleItemState extends BaseItemState {
 
 	constructor(readonly item: SingleMajorItem, startingLocation: ResourceLocation = locations.Unknown) {
 		super(startingLocation);
+
+		if (startingLocation === locations.Starting) {
+			this.collected = true;
+		}
 	}
 
 	@action
 	toggleCollected() {
+		if (this.startingLocation === locations.Starting) {
+			return;
+		}
+
 		this.collected = !this.collected;
 	}
 
